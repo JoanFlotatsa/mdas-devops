@@ -2,5 +2,4 @@
 
 ## **Ejercicio 1
 
-    Use 'pytest' command to test test_pipeline.py
-
+    <p>Use <span style="color:red"><em>pytest</em></span>command to test test_pipeline.py.</p>
