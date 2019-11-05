@@ -14,7 +14,8 @@ cleanup() {
 
     #pkill do not exist in git bash
     #Cross-platform if pkill --> Command not found then:
-    pkill votingapp || ps aux | grep votingapp | head -1 | awk {'print $1'} | head -1 | xargs kill -9
+    #pkill votingapp || ps aux | grep votingapp | head -1 | awk {'print $1'} | head -1 | xargs kill -9
+    docker rm -f myvotingapp || true
     rm -rf build  || true #If build does not exist the pipeline do not stops
 
 }
@@ -27,9 +28,12 @@ build() {
     cp -r ./src/votingapp/ui ./build
 
     #Change directory to buildn and background execution (&)
-    pushd build
-    ./votingapp &
-    popd
+    #pushd build
+    #./votingapp &
+    docker build -f src/votingapp/Dockerfile -t joanflotatsa/votingapp
+    docker run --name myvotingapp -p 8080:80 -d joanflotatsa/cotingapp
+    #docker run --name myvotingapp -it -v /$(pwd)/build:/app -w //app -p 8080:80 - d ubuntu ./votingapp
+    #popd
 }
 
 #echo $?
@@ -44,17 +48,17 @@ build() {
 
 #Test
 test() {
-    curl http://localhost:80/vote \
+    curl http://localhost:8080/vote \
         --request POST \
         --data '{"topics":["Dev","Ops"]}' \
         --header "Content-Type: application/json"
 
-    curl http://localhost:80/vote \
+    curl http://localhost:8080/vote \
         --request PUT \
         --data '{"topic":"Dev"}' \
         --header "Content-Type: application/json"
 
-    winner=$(curl http://localhost:80/vote \
+    winner=$(curl http://localhost:8080/vote \
         --request DELETE \
         --header "Content-Type: application/json" | jq -r '.winner')
     # | jq -r '.winner'
@@ -92,6 +96,8 @@ retry(){
 
 deps
 cleanup
-build 
-#retry test
+GOOS=linux build 
+retry test
 
+#Delivery
+docker push joanflotatsa/votingapp
