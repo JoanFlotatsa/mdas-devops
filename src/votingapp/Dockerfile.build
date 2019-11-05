@@ -1,20 +1,20 @@
 ######## Builder ########
 FROM golang AS builder
 
+COPY . .
+
 # && If the cmd works then execute the next one
 RUN go get github.com/gorilla/websocket && \
     go get github.com/labstack/echo
 
-COPY . .
-
-RUN go build -o /build/votingapp && \
-    cp -r ui /build
+RUN go build -o ./build ./src/votingapp && \
+    cp -r ./src/votingapp/ui ./build
 
 ######## RUNTIME ########
 
 FROM ubuntu:18.04
 
 WORKDIR /app
-COPY --from=builder build .
+COPY build .
 
 ENTRYPOINT [ "./votingapp" ]
