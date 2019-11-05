@@ -14,7 +14,7 @@ cleanup() {
 
     #pkill do not exist in git bash
     #Cross-platform if pkill --> Command not found then:
-    pkill votingapp || ps aux | grep votingapp | head -1 | awk {'print $1'} | head -1 | xargs kill -9
+    pkill votingapp || ps aux | grep votingapp | awk {'print $1'} | head -1 | xargs kill -9
     rm -rf build  || true #If build does not exist the pipeline do not stops
 
 }
@@ -91,7 +91,7 @@ retry(){
 }
 
 deps
-cleanup
+cleanup || true
 build 
 retry test
 

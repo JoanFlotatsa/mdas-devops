@@ -4,8 +4,9 @@ set -e
 #Install Deps
 deps() {
 
-    go get github.com/labstack/echo
     go get github.com/gorilla/websocket
+    go get github.com/labstack/echo
+    go get golang.org/x/sys/unix
     
 }
 
@@ -30,8 +31,8 @@ build() {
     #Change directory to buildn and background execution (&)
     #pushd build
     #./votingapp &
-    docker build -f src/votingapp/Dockerfile -t joanflotatsa/votingapp
-    docker run --name myvotingapp -p 8080:80 -d joanflotatsa/cotingapp
+    docker build -f src/votingapp/Dockerfile -t joanflotatsa/votingapp .
+    docker run --name myvotingapp -p 8080:80 -d joanflotatsa/votingapp
     #docker run --name myvotingapp -it -v /$(pwd)/build:/app -w //app -p 8080:80 - d ubuntu ./votingapp
     #popd
 }
