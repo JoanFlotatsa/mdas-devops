@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 test() {
     curl "http://${VOTINGAPP_HOST}/vote" \
         --request POST \

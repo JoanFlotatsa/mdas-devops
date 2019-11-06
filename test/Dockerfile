@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM alpine
 
-RUN apt-get update && apt-get install -y curl jq && rm -rf /var/lib/apt/lists/*
+RUN apk update && apk add --no-cache curl && apk add --no-cache jq && rm -rf /var/cache/apk/*
 
 COPY test.sh .
 RUN chmod +x ./test.sh
