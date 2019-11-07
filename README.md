@@ -10,7 +10,7 @@
 
 ## Ejercicio 2
 
-Run ./pipeline_docker_v2.sh
+Run ./pipeline_docker_v2.sh o ./pipeline_docker_compose.sh
 
 ---
 

@@ -6,13 +6,6 @@ import (
 	"github.com/labstack/echo"
 )
 
-var state = votingState{make(map[string]int), ""}
-
-type votingState struct {
-	Votes  map[string]int `json:"votes"`
-	Winner string         `json:"winner"`
-}
-
 type votingOptions struct {
 	Topics []string `json:"topics"`
 }
@@ -22,6 +15,10 @@ type voteOption struct {
 }
 
 func getVotes(c echo.Context) error {
+	state, err := getState()
+	if err != nil {
+		return err
+	}
 	return c.JSON(http.StatusOK, state)
 }
 
@@ -31,12 +28,12 @@ func startVoting(c echo.Context) error {
 		return err
 	}
 
+	state := votingState{make(map[string]int), ""}
 	for _, val := range topics.Topics {
 		state.Votes[val] = 0
 	}
 
-	state.Winner = ""
-	return saveAndPublishState(c)
+	return saveAndPublishState(c, &state)
 }
 
 func vote(c echo.Context) error {
@@ -45,15 +42,25 @@ func vote(c echo.Context) error {
 		return err
 	}
 
+	state, err := getState()
+	if err != nil {
+		return err
+	}
+
 	if state.Winner != "" {
 		return c.JSON(http.StatusBadRequest, state)
 	}
 
 	state.Votes[topic.Topic] = state.Votes[topic.Topic] + 1
-	return saveAndPublishState(c)
+	return saveAndPublishState(c, state)
 }
 
 func finishVoting(c echo.Context) error {
+	state, err := getState()
+	if err != nil {
+		return err
+	}
+
 	winner := getRandomKey(state.Votes)
 	for topic, count := range state.Votes {
 		if count > state.Votes[winner] {
@@ -62,11 +69,16 @@ func finishVoting(c echo.Context) error {
 	}
 
 	state.Winner = winner
-	return saveAndPublishState(c)
+	return saveAndPublishState(c, state)
 }
 
-func saveAndPublishState(c echo.Context) error {
-	err := sendMessage(state)
+func saveAndPublishState(c echo.Context, state *votingState) error {
+	err := saveState(*state)
+	if err != nil {
+		return err
+	}
+
+	err = sendMessage(state)
 	if err != nil {
 		return err
 	}
