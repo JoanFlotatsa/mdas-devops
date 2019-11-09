@@ -14,7 +14,7 @@
 
     or 
 
-    (redis version)
+    (redis & nginx version)
     ./pipeline_docker_compose.sh
 
 ---
