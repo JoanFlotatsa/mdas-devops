@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+
+  myredis: 
+    image: redis
+
+  myvotingapp: 
+    image: joanflotatsa/votingapp
+    build: 
+      dockerfile: Dockerfile
+      context: ./src/votingapp
+    ports: 
+    - 8080:80
+    environment: 
+      REDIS: "myredis:6379"
+
+  mytest: 
+    image: joanflotatsa/python_test
+    build: 
+      context: ./test
+    environment: 
+      VOTINGAPP_HOST: "myvotingapp"
+    command: python -m pytest test_pipeline.py
