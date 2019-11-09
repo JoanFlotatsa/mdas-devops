@@ -10,23 +10,23 @@
 
 ## Ejercicio 2
 
-Run ./pipeline_docker_v2.sh 
+    Run ./pipeline_docker_v2.sh 
 
-or 
+    or 
 
-(redis version)
-./pipeline_docker_compose.sh
+    (redis version)
+    ./pipeline_docker_compose.sh
 
 ---
 
 ## Ejercicio 3
 
-Run ./pipeline_docker_python.sh 
+    Run ./pipeline_docker_python.sh 
 
-or
+    or
 
-(redis version)
-cd python_test
-./pipeline_docker_compose_python.sh
+    (redis version)
+    cd python_test
+    ./pipeline_docker_compose_python.sh
 
 ---

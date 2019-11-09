@@ -2,6 +2,21 @@ version: "3.7"
 
 services:
 
+  #mynginx: 
+    #image: joanflotatsa/votingapp-nginx
+    #build: 
+      #dockerfile: Dockerfile
+      #context: ./nginx
+    #ports: 
+      #- 8080:80
+
+  mynginx: 
+    image: nginx
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    ports: 
+      - 8080:80
+  
   myredis: 
     image: redis
 
@@ -10,8 +25,6 @@ services:
     build: 
       dockerfile: Dockerfile
       context: ./src/votingapp
-    ports: 
-    - 8080:80
     environment: 
       REDIS: "myredis:6379"
 
