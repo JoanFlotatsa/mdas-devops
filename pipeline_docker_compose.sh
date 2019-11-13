@@ -9,8 +9,9 @@ kubectl apply -f votingapp.yaml
 #test
 kubectl run mytests \
 --generator=run-pod/v1 \
---image=joanflotatsa/votingapp-test \
+--image=joanflotatsa/myvotingapp-test \
 --env VOTINGAPP_HOST=myvotingapp.votingapp \
 --rm --attach --restart=Never
+
 
 echo "GREEN" || echo "RED"

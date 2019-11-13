@@ -30,3 +30,7 @@
     ./pipeline_docker_compose_python.sh
 
 ---
+
+## Ejercicio 4
+
+    ./pipeline_docker_compose.sh
